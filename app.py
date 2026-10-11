@@ -38,6 +38,10 @@ st.markdown("""
 # --- 2. HELPER FUNCTIONS ---
 
 def create_toc(file_names, page_counts):
+    """Generates the Table of Contents Page"""
+    packet = io.BytesIO()
+    can = canvas.Canvas(packet, pagesize=letter)
+    width, height = letter)
 
 def image_to_pdf_bytes(image_file_like_object):
     """Converts an image file-like object into a PDF byte stream."""
@@ -66,11 +70,7 @@ def image_to_pdf_bytes(image_file_like_object):
     except Exception as e:
         raise ValueError(f"Error converting image to PDF: {e}")
 
-age_counts):
-    """Generates the Table of Contents Page"""
-    packet = io.BytesIO()
-    can = canvas.Canvas(packet, pagesize=letter)
-    width, height = letter
+
 
     # Header
     can.setFont("Helvetica-Bold", 18)
