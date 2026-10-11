@@ -37,7 +37,7 @@ st.markdown("""
 
 # --- 2. HELPER FUNCTIONS ---
 
-def create_toc(file_names, p
+def create_toc(file_names, page_counts):
 
 def image_to_pdf_bytes(image_file_like_object):
     """Converts an image file-like object into a PDF byte stream."""
