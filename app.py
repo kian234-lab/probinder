@@ -41,7 +41,7 @@ def create_toc(file_names, page_counts):
     """Generates the Table of Contents Page"""
     packet = io.BytesIO()
     can = canvas.Canvas(packet, pagesize=letter)
-    width, height = letter)
+    width, height = letter
 
 def image_to_pdf_bytes(image_file_like_object):
     """Converts an image file-like object into a PDF byte stream."""
