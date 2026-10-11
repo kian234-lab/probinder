@@ -43,22 +43,54 @@ def create_toc(file_names, page_counts):
     can = canvas.Canvas(packet, pagesize=letter)
     width, height = letter
 
+    # Header
+    can.setFont("Helvetica-Bold", 18)
+    can.drawString(50, height - 50, "Table of Contents")
+    can.setLineWidth(1)
+    can.line(50, height - 60, width - 50, height - 60)
+
+    # Content
+    y = height - 100
+    can.setFont("Helvetica", 11)
+    current_page = 2  # Starts after TOC
+
+    for name, pages in zip(file_names, page_counts):
+        # Truncate long names
+        display_name = (name[:60] + '...') if len(name) > 60 else name
+
+        # Dots for visual connection
+        can.setFillColorRGB(0.5, 0.5, 0.5)
+        can.drawString(50, y, display_name)
+        can.drawRightString(width - 50, y, f"Page {current_page}")
+
+        # Reset color
+        can.setFillColorRGB(0, 0, 0)
+
+        y -= 25
+        current_page += pages
+
+        if y < 50:
+            can.showPage()
+            y = height - 50
+
+    can.save()
+    packet.seek(0)
+    return packet
+
+
 def image_to_pdf_bytes(image_file_like_object):
     """Converts an image file-like object into a PDF byte stream."""
     try:
         # Open the image using Pillow
         img = Image.open(image_file_like_object)
 
-        # Convert to RGB if not already, as img2pdf prefers RGB or greyscale
-        if img.mode == 'RGBA':
-            img = img.convert('RGB')
-        elif img.mode == 'P': # Palette mode, convert to RGB
+        # Convert to RGB if not already
+        if img.mode in ('RGBA', 'P'):
             img = img.convert('RGB')
 
         # Save the image to a BytesIO object in PNG format for img2pdf
-        # img2pdf can directly take a file path or file-like object
         img_byte_arr = io.BytesIO()
-        img.save(img_byte_arr, format=img.format if img.format else 'PNG') # Use original format or default to PNG
+        img.save(img_byte_arr, format=img.format if img.format else 'PNG')
         img_byte_arr.seek(0)
 
         # Convert the image bytes to PDF bytes using img2pdf
@@ -69,6 +101,7 @@ def image_to_pdf_bytes(image_file_like_object):
 
     except Exception as e:
         raise ValueError(f"Error converting image to PDF: {e}")
+
 
 
 
